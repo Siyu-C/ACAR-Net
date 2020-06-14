@@ -1,6 +1,8 @@
 # ACAR-Net
 Actor-Context-Actor Relation Network for Spatio-temporal Action Localization - 1st place solution in [AVA-Kinetics
-Crossover Challenge 2020](https://research.google.com/ava/challenge.html)
+Crossover Challenge 2020](https://research.google.com/ava/challenge.html) . 
+
+Code and model will come soon!
 
 | ![Junting Pan][JuntingPan-photo]  | ![Siyu Chen][SiyuChen-photo]  |  ![Zheng Shou][ZhengShou-photo] | ![Jing Shao][JingShao-photo] | ![Hongsheng Li][HongshengLi-photo]  |
 |:-:|:-:|:-:|:-:|:-:|
