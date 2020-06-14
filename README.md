@@ -28,7 +28,7 @@ Crossover Challenge 2020**.
 ## CVPR 2020 AVA-Kinetics Challenge  
 Find slides and video presentation of our winning solution on [[Google Slides]](https://docs.google.com/presentation/d/1JrZLddujC2LVl3etUKkbj40o486fnQMzlAHHbc8F9q4/edit?usp=sharing) [[Youtube Video]](https://youtu.be/zJPEmG3LCH4?list=PLw6H4u-XW8siSxqdRVcD5aBn3OTuA7M7x&t=1105) [[Bilibili Video]](https://www.bilibili.com/video/BV1nT4y1J716) (Starting from 18:20).
 
-## Prepring
+## Preprint
 Find our work on [Preprint](https://junting.github.io/preprint/acar.pdf).
 
 
@@ -40,3 +40,7 @@ ACAR Net Architecture
 ![architecture-fig]
 
 [architecture-fig]: https://github.com/Siyu-C/ACAR-Net/blob/master/figs/architecture.png "acar-net architecture"
+
+## Contact
+If you have any general doubt about our work or code which may be of interest for other researchers, please use the [public issues section](https://github.com/Siyu-C/ACAR-Net/issues) on this github repo. Alternatively, drop us an e-mail at siyuchen@pku.edu.cn and junting.pa@gmail.com .
+
