@@ -13,7 +13,7 @@ Actor-Context-Actor Relation Network for Spatio-temporal Action Localization
 
 [JuntingPan-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/juntingpan.png "Junting Pan"
 [SiyuChen-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/siyuchen.png "Siyu Chen"
-[ZhengShou-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/zhenshou.png "Zheng Shou"
+[ZhengShou-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/zhengshou.png "Zheng Shou"
 [JingShao-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/jingshao.png "JingShao"
 [HongshengLi-photo]: https://github.com/Siyu-C/ACAR-Net/blob/master/authors/hongshengli.png "Hongsheng Li"
 
