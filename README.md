@@ -33,9 +33,6 @@ Find our work on [Preprint](https://junting.github.io/preprint/acar.pdf).
 
 
 ## Models
-
-The Seg2Vid presented in our work can be downloaded from the links provided below the figure:
-
 ACAR Net Architecture
 ![architecture-fig]
 
