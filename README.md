@@ -31,6 +31,23 @@ Find slides and video presentation of our winning solution on [[Google Slides]](
 ## Preprint
 Find our work on [Arxiv](https://arxiv.org/pdf/2006.07976.pdf).
 
+Please cite with the following Bibtex code:
+
+```
+@misc{pan2020actorcontextactor,
+    title={Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization},
+    author={Junting Pan and Siyu Chen and Zheng Shou and Jing Shao and Hongsheng Li},
+    year={2020},
+    eprint={2006.07976},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}
+```
+
+You may also want to refer to our publication with the more human-friendly Chicago style:
+
+*Junting Pan, Siyu Chen, Zheng Shou, Jing Shao, Hongsheng Li. "Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization." Arxiv 2020.*
+
 
 ## Models
 ACAR Net Architecture
