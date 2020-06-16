@@ -34,13 +34,11 @@ Find our work on [Arxiv](https://arxiv.org/pdf/2006.07976.pdf).
 Please cite with the following Bibtex code:
 
 ```
-@misc{pan2020actorcontextactor,
-    title={Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization},
-    author={Junting Pan and Siyu Chen and Zheng Shou and Jing Shao and Hongsheng Li},
-    year={2020},
-    eprint={2006.07976},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+@article{pan2020actorcontextactor,
+  title={Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization},
+  author={Junting Pan and Siyu Chen and Zheng Shou and Jing Shao and Hongsheng Li},
+  journal={arXiv preprint arXiv:2006.07976},
+  year={2020}
 }
 ```
 
