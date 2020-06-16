@@ -29,7 +29,7 @@ Crossover Challenge 2020**.
 Find slides and video presentation of our winning solution on [[Google Slides]](https://docs.google.com/presentation/d/1JrZLddujC2LVl3etUKkbj40o486fnQMzlAHHbc8F9q4/edit?usp=sharing) [[Youtube Video]](https://youtu.be/zJPEmG3LCH4?list=PLw6H4u-XW8siSxqdRVcD5aBn3OTuA7M7x&t=1105) [[Bilibili Video]](https://www.bilibili.com/video/BV1nT4y1J716) (Starting from 18:20).
 
 ## Preprint
-Find our work on [Preprint](https://junting.github.io/preprint/acar.pdf).
+Find our work on [Arxiv](https://arxiv.org/pdf/2006.07976.pdf).
 
 
 ## Models
