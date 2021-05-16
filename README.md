@@ -24,6 +24,24 @@ Some key dependencies are listed below, while others are given in [`requirements
 - PyTorch >= 1.3, and a corresponding version of torchvision
 - ffmpeg (used in data preparation)
 
+## Usage
+Default values for arguments `nproc_per_node`, `backend` and `master_port` are `8`, `nccl` and `31114` respectively.
+
+```
+python main.py --config CONFIG_FILE [--nproc_per_node N_PROCESSES] [--backend BACKEND] [--master_addr MASTER_ADDR] [--master_port MASTER_PORT]
+```
+
+### Running with Multiple Machines
+In this case, the `master_addr` argument must be provided. Moreover, arguments `nnodes` and `node_rank` can be additionally specified (similar to `torch.distributed.launch`), otherwise the program will try to obtain their values from environment variables. See [`distributed_utils.py`](https://github.com/Siyu-C/ACAR-Net/blob/master/distributed_utils.py) for details.
+
+## To-do List
+- Data preparation for AVA dataset
+- Pre-trained models
+- Model zoo
+- More advanced backbone
+- Data preparation for Kinetics dataset, and training on AVA-Kinetics
+- Implementation for ACFB
+
 ## License
 ACAR-Net is released under the [Apache 2.0 license](https://github.com/Siyu-C/ACAR-Net/blob/master/LICENSE).
 

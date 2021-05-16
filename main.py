@@ -8,6 +8,7 @@ import socket
 import time
 from easydict import EasyDict
 import yaml
+from tensorboardX import SummaryWriter
 
 import torch
 import torch.optim as optim
@@ -16,14 +17,11 @@ from torch.nn.parallel import DistributedDataParallel
 
 from calc_mAP import run_evaluation
 from datasets import ava, spatial_transforms, temporal_transforms
+from distributed_utils import init_distributed
 import losses
 from models import AVA_model
 from scheduler import get_scheduler
 from utils import *
-
-from distributed_utils import init_distributed
-
-from tensorboardX import SummaryWriter
 
 
 def main(local_rank, args):
@@ -437,7 +435,7 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='PyTorch AVA Training')
+    parser = argparse.ArgumentParser(description='PyTorch AVA Training and Evaluation')
     parser.add_argument('--config', type=str, required=True)
     parser.add_argument('--nproc_per_node', type=int, default=8)
     parser.add_argument('--backend', type=str, default='nccl')
