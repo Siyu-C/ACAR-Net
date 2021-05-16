@@ -1,0 +1,5 @@
+Pillow>=8.1.1
+PyYAML
+easydict
+numpy
+tensorboardX>=2.0
