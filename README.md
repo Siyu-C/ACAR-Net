@@ -23,8 +23,10 @@ Some key dependencies are listed below, while others are given in [`requirements
 - Python >= 3.6
 - PyTorch >= 1.3, and a corresponding version of torchvision
 - ffmpeg (used in data preparation)
-- Pre-trained models in the `pretrained` folder, which are listed in [`pretrained/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/pretrained/README.md)
-g
+- Download pre-trained models, which are listed in [`pretrained/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/pretrained/README.md), to the `pretrained` folder
+- Prepare data. Please refer to [`DATA.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/DATA.md)
+- Download annotations files to the `annotations` folder. See [`annotations/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/annotations/README.md) for detailed information.
+
 ## Usage
 Default values for arguments `nproc_per_node`, `backend` and `master_port` are `8`, `nccl` and `31114` respectively.
 
@@ -36,7 +38,6 @@ python main.py --config CONFIG_FILE [--nproc_per_node N_PROCESSES] [--backend BA
 In this case, the `master_addr` argument must be provided. Moreover, arguments `nnodes` and `node_rank` can be additionally specified (similar to `torch.distributed.launch`), otherwise the program will try to obtain their values from environment variables. See [`distributed_utils.py`](https://github.com/Siyu-C/ACAR-Net/blob/master/distributed_utils.py) for details.
 
 ## To-do List
-- Data preparation for AVA dataset
 - Model zoo
 - More advanced backbone
 - Data preparation for Kinetics dataset, and training on AVA-Kinetics
