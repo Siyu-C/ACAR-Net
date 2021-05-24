@@ -23,6 +23,7 @@ Some key dependencies are listed below, while others are given in [`requirements
 - Python >= 3.6
 - PyTorch >= 1.3, and a corresponding version of torchvision
 - ffmpeg (used in data preparation)
+- Pre-trained models in the `pretrained` folder, which are listed in [`pretrained/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/pretrained/README.md)
 
 ## Usage
 Default values for arguments `nproc_per_node`, `backend` and `master_port` are `8`, `nccl` and `31114` respectively.
@@ -36,7 +37,6 @@ In this case, the `master_addr` argument must be provided. Moreover, arguments `
 
 ## To-do List
 - Data preparation for AVA dataset
-- Pre-trained models
 - Model zoo
 - More advanced backbone
 - Data preparation for Kinetics dataset, and training on AVA-Kinetics
