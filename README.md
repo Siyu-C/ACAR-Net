@@ -23,8 +23,8 @@ Some key dependencies are listed below, while others are given in [`requirements
 - Python >= 3.6
 - PyTorch >= 1.3, and a corresponding version of torchvision
 - ffmpeg (used in data preparation)
-- Download pre-trained models, which are listed in [`pretrained/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/pretrained/README.md), to the `pretrained` folder
-- Prepare data. Please refer to [`DATA.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/DATA.md)
+- Download pre-trained models, which are listed in [`pretrained/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/pretrained/README.md), to the `pretrained` folder.
+- Prepare data. Please refer to [`DATA.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/DATA.md).
 - Download annotations files to the `annotations` folder. See [`annotations/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/annotations/README.md) for detailed information.
 
 ## Usage
@@ -37,8 +37,11 @@ python main.py --config CONFIG_FILE [--nproc_per_node N_PROCESSES] [--backend BA
 ### Running with Multiple Machines
 In this case, the `master_addr` argument must be provided. Moreover, arguments `nnodes` and `node_rank` can be additionally specified (similar to `torch.distributed.launch`), otherwise the program will try to obtain their values from environment variables. See [`distributed_utils.py`](https://github.com/Siyu-C/ACAR-Net/blob/master/distributed_utils.py) for details.
 
+## Model Zoo
+Trained models are provided in [`model_zoo/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/model_zoo/README.md).
+
 ## To-do List
-- Model zoo
+- Our detections for AVA
 - More advanced backbone
 - Data preparation for Kinetics dataset, and training on AVA-Kinetics
 - Implementation for ACFB
@@ -50,7 +53,7 @@ ACAR-Net is released under the [Apache 2.0 license](https://github.com/Siyu-C/AC
 Find slides and video presentation of our winning solution on [[Google Slides]](https://docs.google.com/presentation/d/1JrZLddujC2LVl3etUKkbj40o486fnQMzlAHHbc8F9q4/edit?usp=sharing) [[Youtube Video]](https://youtu.be/zJPEmG3LCH4?list=PLw6H4u-XW8siSxqdRVcD5aBn3OTuA7M7x&t=1105) [[Bilibili Video]](https://www.bilibili.com/video/BV1nT4y1J716) (Starting from 18:20).
 
 ## Preprint
-Find our work on [ArXiv](https://arxiv.org/pdf/2006.07976.pdf).
+Find our work on [arXiv](https://arxiv.org/pdf/2006.07976.pdf).
 ![architecture-fig]
 
 [architecture-fig]: https://github.com/Siyu-C/ACAR-Net/blob/master/figs/architecture.png "acar-net architecture"
