@@ -153,11 +153,11 @@ class Normalize(object):
 class Scale(object):
     """Rescale the input PIL.Image to the given size.
     Args:
-        size (sequence or int): Desired output size. If size is a sequence like
+        resize (sequence or int): Desired output size. If size is a sequence like
             (w, h), output size will be matched to this. If size is an int,
             smaller edge of the image will be matched to this number.
             i.e, if height > width, then image will be rescaled to
-            (size * height / width, size).
+            (size, size * height / width).
         interpolation (int, optional): Desired interpolation. Default is
             ``PIL.Image.BILINEAR``.
         max_ratio (float, optional): If not None, denotes maximum allowed aspect

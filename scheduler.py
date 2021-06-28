@@ -1,4 +1,3 @@
-
 from bisect import bisect_right
 import math
 import torch
