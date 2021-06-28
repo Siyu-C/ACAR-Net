@@ -248,7 +248,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, scheduler,
             loss = criterion(outputs, targets)
             loss = loss * num_rois / tot_rois * world_size
         else:
-            loss = torch.cuda.FloatTensor(0.)
+            loss = torch.tensor(0).float().cuda()
             for param in model.parameters():
                 if param.requires_grad:
                     loss = loss + param.sum()
