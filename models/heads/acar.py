@@ -8,7 +8,7 @@ __all__ = ['acar']
 
 
 class HR2O_NL(nn.Module):
-    def __init__(self, hidden_dim=512, kernel_size=3):
+    def __init__(self, hidden_dim=512, kernel_size=3, mlp_1x1=False):
         super(HR2O_NL, self).__init__()
 
         self.hidden_dim = hidden_dim
@@ -17,8 +17,13 @@ class HR2O_NL(nn.Module):
         self.conv_q = nn.Conv2d(hidden_dim, hidden_dim, kernel_size, padding=padding, bias=False)
         self.conv_k = nn.Conv2d(hidden_dim, hidden_dim, kernel_size, padding=padding, bias=False)
         self.conv_v = nn.Conv2d(hidden_dim, hidden_dim, kernel_size, padding=padding, bias=False)
-        
-        self.conv = nn.Conv2d(hidden_dim, hidden_dim, kernel_size, padding=padding, bias=False)
+
+        self.conv = nn.Conv2d(
+            hidden_dim, hidden_dim,
+            1 if mlp_1x1 else kernel_size,
+            padding=0 if mlp_1x1 else padding,
+            bias=False
+        )
         self.norm = nn.GroupNorm(1, hidden_dim, affine=True)
         self.dp = nn.Dropout(0.2)
 
@@ -34,19 +39,20 @@ class HR2O_NL(nn.Module):
         virt_feats = nn.functional.relu(virt_feats)
         virt_feats = self.conv(virt_feats)
         virt_feats = self.dp(virt_feats)
-        
+
         x = x + virt_feats
         return x
 
 
 class ACARHead(nn.Module):
     def __init__(self, width, roi_spatial=7, num_classes=60, dropout=0., bias=False,
-                 reduce_dim=1024, hidden_dim=512, downsample='max2x2', depth=2, kernel_size=3):
+                 reduce_dim=1024, hidden_dim=512, downsample='max2x2', depth=2,
+                 kernel_size=3, mlp_1x1=False):
         super(ACARHead, self).__init__()
 
         self.roi_spatial = roi_spatial
         self.roi_maxpool = nn.MaxPool2d(roi_spatial)
-        
+
         # actor-context feature encoder
         self.conv_reduce = nn.Conv2d(width, reduce_dim, 1, bias=False)
 
@@ -63,9 +69,9 @@ class ACARHead(nn.Module):
         # high-order relation reasoning operator (HR2O_NL)
         layers = []
         for _ in range(depth):
-            layers.append(HR2O_NL(hidden_dim, kernel_size))
+            layers.append(HR2O_NL(hidden_dim, kernel_size, mlp_1x1))
         self.hr2o = nn.Sequential(*layers)
-        
+
         # classification
         self.gap = nn.AdaptiveAvgPool2d(1)
         self.fc1 = nn.Linear(reduce_dim, hidden_dim, bias=False)
@@ -83,7 +89,7 @@ class ACARHead(nn.Module):
             feats = [data['features']]
         else:
             feats = data['features']
-        
+
         # temporal average pooling
         h, w = feats[0].shape[3:]
         # requires all features have the same spatial dimensions
@@ -108,7 +114,7 @@ class ACARHead(nn.Module):
             n_rois = roi_ids[idx+1] - roi_ids[idx]
             if n_rois == 0:
                 continue
-            
+
             eff_h, eff_w = math.ceil(h * sizes_before_padding[idx][1]), math.ceil(w * sizes_before_padding[idx][0])
             bg_feats = feats[idx][:, :eff_h, :eff_w]
             bg_feats = bg_feats.unsqueeze(0).repeat((n_rois, 1, 1, 1))
@@ -126,9 +132,9 @@ class ACARHead(nn.Module):
             interact_feats = self.hr2o(interact_feats)
             interact_feats = self.gap(interact_feats)
             high_order_feats.append(interact_feats)
-            
+
         high_order_feats = torch.cat(high_order_feats, dim=0).view(data['num_rois'], -1)
-        
+
         outputs = self.fc1(roi_feats)
         outputs = nn.functional.relu(outputs)
         outputs = torch.cat([outputs, high_order_feats], dim=1)
