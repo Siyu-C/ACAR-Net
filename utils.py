@@ -2,9 +2,9 @@ import os
 import csv
 import logging
 import math
-import numpy as np
 import random
 
+import numpy as np
 import torch
 import torch.distributed as dist
 from torch.utils.data.sampler import Sampler
@@ -31,7 +31,7 @@ def random_seed(seed_value):
     os.environ['PYTHONHASHSEED'] = str(seed_value)
     torch.cuda.manual_seed(seed_value)
     torch.cuda.manual_seed_all(seed_value)
-    
+
 
 def parameters_string(module):
     lines = [
@@ -56,7 +56,7 @@ def parameters_string(module):
     ))
     lines.append("")
     return "\n".join(lines)
-    
+
 
 def create_logger(log_file, level=logging.INFO):
     global _LOGGER
@@ -145,7 +145,7 @@ class DistributedSampler(Sampler):
         self.rank = rank
         self.round_down = round_down
         self.epoch = 0
-        
+
         self.total_size = len(self.dataset)
         if self.round_down:
             self.num_samples = int(math.floor(len(self.dataset) / self.world_size))
@@ -163,7 +163,7 @@ class DistributedSampler(Sampler):
         # subsample
         offset = self.num_samples * self.rank
         indices = indices[offset:offset + self.num_samples]
-        if self.round_down or (not self.round_down and self.rank < self.world_size-1):
+        if self.round_down:
             assert len(indices) == self.num_samples
 
         return iter(indices)
@@ -192,7 +192,7 @@ def load_pretrain(pretrain_opt, net):
                 new_k = pretrain_opt.get('replace_to', '') + k[len(pretrain_opt.replace_prefix):]
                 checkpoint[new_k] = checkpoint.pop(k)
     net.load_state_dict(checkpoint, strict=False)
-    
+
     if get_rank() == 0:
         ckpt_keys = set(checkpoint.keys())
         own_keys = set(net.state_dict().keys())
