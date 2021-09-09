@@ -33,7 +33,7 @@ def main(local_rank, args):
 
     opt = EasyDict(config)
     opt.world_size = world_size
-    
+
     if rank == 0:
         mkdir(opt.result_path)
         mkdir(os.path.join(opt.result_path, 'tmp'))
@@ -46,25 +46,25 @@ def main(local_rank, args):
     else:
         logger = writer = None
     dist.barrier()
-    
+
     random_seed(opt.manual_seed)
     # setting benchmark to True causes OOM in some cases
     if opt.get('cudnn', None) is not None:
         torch.backends.cudnn.deterministic = opt.cudnn.get('deterministic', False)
         torch.backends.cudnn.benchmark = opt.cudnn.get('benchmark', False)
-    
+
     # create model
     net = AVA_model(opt.model)
     net.cuda()
     net = DistributedDataParallel(net, device_ids=[local_rank], broadcast_buffers=False)
-    
+
     if rank == 0:
         logger.info(net)
         logger.info(parameters_string(net))
 
     if not opt.get('evaluate', False):
         train_aug = opt.train.augmentation
-        
+
         spatial_transform = [getattr(spatial_transforms, aug.type)(**aug.get('kwargs', {})) for aug in train_aug.spatial]
         spatial_transform = spatial_transforms.Compose(spatial_transform)
 
@@ -88,7 +88,7 @@ def main(local_rank, args):
             sampler=train_sampler,
             drop_last=True
         )
-        
+
         if rank == 0:
             logger.info('# train data: {}'.format(len(train_data)))
             logger.info('train spatial aug: {}'.format(spatial_transform))
@@ -135,7 +135,7 @@ def main(local_rank, args):
         spatial_transform.append(spatial_transforms.Compose(transform))
 
     temporal_transform = getattr(temporal_transforms, val_aug.temporal.type)(**val_aug.temporal.get('kwargs', {}))
-                                                        
+
     val_data = ava.AVAmulticrop(
         opt.val.root_path,
         opt.val.annotation_path,
@@ -153,7 +153,7 @@ def main(local_rank, args):
         pin_memory=True,
         sampler=val_sampler
     )
-    
+
     val_logger = None
     if rank == 0:
         logger.info('# val data: {}'.format(len(val_data)))
@@ -169,10 +169,10 @@ def main(local_rank, args):
             val_logger = Logger(
                 os.path.join(opt.result_path, 'val.log'),
                 val_log_items)
-    
+
     if opt.get('pretrain', None) is not None:
         load_pretrain(opt.pretrain, net)
-    
+
     begin_epoch = 1
     if opt.get('resume_path', None) is not None:
         if not os.path.isfile(opt.resume_path):
@@ -200,22 +200,22 @@ def main(local_rank, args):
             train_sampler.set_epoch(e)
             train_epoch(e, train_loader, net, criterion, optimizer, scheduler,
                         opt, logger, train_logger, train_batch_logger, rank, world_size, writer)
-            
+
             if e % opt.train.val_freq == 0:
                 val_epoch(e, val_loader, net, criterion, act_func,
                           opt, logger, val_logger, rank, world_size, writer)
 
     if rank == 0:
         writer.close()
-    
-    
+
+
 def train_epoch(epoch, data_loader, model, criterion, optimizer, scheduler, 
                 opt, logger, epoch_logger, batch_logger, rank, world_size, writer):
     if rank == 0:
         logger.info('Training at epoch {}'.format(epoch))
-        
+
     model.train()
-    
+
     batch_time = AverageMeter(opt.print_freq)
     data_time = AverageMeter(opt.print_freq)
     loss_time = AverageMeter(opt.print_freq)
@@ -233,7 +233,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, scheduler,
         num_rois = ret['num_rois']
         outputs = ret['outputs']
         targets = ret['targets']
-        
+
         tot_rois = torch.Tensor([num_rois]).cuda()
         dist.all_reduce(tot_rois)
         tot_rois = tot_rois.item()
@@ -268,7 +268,7 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, scheduler,
         if (i + 1) % opt.print_freq == 0 and rank == 0:
             writer.add_scalar('train/loss', losses.avg, curr_step + 1)
             writer.add_scalar('train/lr', optimizer.param_groups[0]['lr'], curr_step + 1)
-            
+
             batch_logger.log({
                 'epoch': epoch,
                 'batch': i + 1,
@@ -317,9 +317,9 @@ def train_epoch(epoch, data_loader, model, criterion, optimizer, scheduler,
             }
             torch.save(states, save_file_path)
             logger.info('Checkpoint saved to {}'.format(save_file_path))
-        
+
         logger.info('-' * 100)
-            
+
 
 def val_epoch(epoch, data_loader, model, criterion, act_func,
               opt, logger, epoch_logger, rank, world_size, writer):
@@ -327,12 +327,10 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
         logger.info('Evaluation at epoch {}'.format(epoch))
 
     model.eval()
-    
+
     calc_loss = opt.val.with_label
-    save_pred = (opt.val.get('eval_mAP', None) is not None)
-    if save_pred:
-        out_file = open(os.path.join(opt.result_path, 'tmp', 'predict_rank%d.csv'%rank), 'w')
-    
+    out_file = open(os.path.join(opt.result_path, 'tmp', 'predict_rank%d.csv'%rank), 'w')
+
     batch_time = AverageMeter(opt.print_freq)
     data_time = AverageMeter(opt.print_freq)
     if calc_loss:
@@ -355,17 +353,16 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
             loss = criterion(outputs, targets)
             global_losses.update(loss.item(), num_rois)
 
-        if save_pred:
-            fnames, mid_times, bboxes = ret['filenames'], ret['mid_times'], ret['bboxes']
-            outputs = act_func(outputs).cpu().data
-            idx_to_class = data_loader.dataset.idx_to_class
-            for k in range(num_rois):
-                prefix = "%s,%s,%.3f,%.3f,%.3f,%.3f"%(fnames[k], mid_times[k],
-                                                      bboxes[k][0], bboxes[k][1],
-                                                      bboxes[k][2], bboxes[k][3])
-                for cls in range(outputs.shape[1]):
-                    score_str = '%.3f'%outputs[k][cls]
-                    out_file.write(prefix + ",%d,%s\n" % (idx_to_class[cls]['id'], score_str))
+        fnames, mid_times, bboxes = ret['filenames'], ret['mid_times'], ret['bboxes']
+        outputs = act_func(outputs).cpu().data
+        idx_to_class = data_loader.dataset.idx_to_class
+        for k in range(num_rois):
+            prefix = "%s,%s,%.3f,%.3f,%.3f,%.3f"%(fnames[k], mid_times[k],
+                                                    bboxes[k][0], bboxes[k][1],
+                                                    bboxes[k][2], bboxes[k][3])
+            for cls in range(outputs.shape[1]):
+                score_str = '%.3f'%outputs[k][cls]
+                out_file.write(prefix + ",%d,%s\n" % (idx_to_class[cls]['id'], score_str))
 
         batch_time.update(time.time() - end_time)
         end_time = time.time()
@@ -380,7 +377,7 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
                             len(data_loader),
                             batch_time=batch_time,
                             data_time=data_time))
-    
+
     if calc_loss:
         total_num = torch.Tensor([global_losses.count]).cuda()
         loss_sum = torch.Tensor([global_losses.avg * global_losses.count]).cuda()
@@ -388,10 +385,9 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
         dist.all_reduce(loss_sum)
         final_loss = loss_sum.item() / (total_num.item() + 1e-10)
 
-    if save_pred:
-        out_file.close()
-        dist.barrier()
-        
+    out_file.close()
+    dist.barrier()
+
     if rank == 0:
         val_log = {'epoch': epoch}
         val_str = 'Epoch [{}]'.format(epoch)
@@ -401,13 +397,13 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
             val_log['loss'] = final_loss
             val_str += '\tLoss {:.4f}'.format(final_loss)
 
-        if save_pred:
-            result_file = os.path.join(opt.result_path, 'predict_epoch%d.csv'%epoch)
-            with open(result_file, 'w') as of:
-                for r in range(world_size):
-                    with open(os.path.join(opt.result_path, 'tmp', 'predict_rank%d.csv'%r), 'r') as f:
-                        of.writelines(f.readlines())
+        result_file = os.path.join(opt.result_path, 'predict_epoch%d.csv'%epoch)
+        with open(result_file, 'w') as of:
+            for r in range(world_size):
+                with open(os.path.join(opt.result_path, 'tmp', 'predict_rank%d.csv'%r), 'r') as f:
+                    of.writelines(f.readlines())
 
+        if opt.val.get('eval_mAP', None) is not None:
             eval_mAP = opt.val.eval_mAP
             metrics = run_evaluation(
                 open(eval_mAP.labelmap, 'r'), 
@@ -421,10 +417,10 @@ def val_epoch(epoch, data_loader, model, criterion, act_func,
             writer.add_scalar('val/mAP', mAP, epoch)
             val_log['mAP'] = mAP
             val_str += '\tmAP {:.6f}'.format(mAP)
-        
+
         writer.flush()
-        
-        if calc_loss or save_pred:
+
+        if epoch_logger is not None:
             epoch_logger.log(val_log)
 
             logger.info('-' * 100)
