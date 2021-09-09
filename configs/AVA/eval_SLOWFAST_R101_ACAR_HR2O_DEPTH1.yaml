@@ -1,23 +1,20 @@
 evaluate: True
 
 pretrain:
-    path: model_zoo/AVA_SLOWFAST_R50_ACAR_HR2O.pth.tar
+    path: model_zoo/AVA_SLOWFAST_R101_ACAR_HR2O_DEPTH1.pth.tar
 
-result_path: experiments/AVA/eval_SLOWFAST_R50_ACAR_HR2O
+result_path: experiments/AVA/eval_SLOWFAST_R101_ACAR_HR2O_DEPTH1
 manual_seed: 1
 print_freq: 20
 
 model:
     freeze_bn: True
     backbone:
-        arch: slowfast50
+        arch: slowfast101
         learnable: True
         kwargs:
             alpha: 4
             beta: 0.125
-            fuse_only_conv: False
-            fuse_kernel_size: 7
-            slow_full_span: True
     neck:
         type: basic
         kwargs:
@@ -32,7 +29,8 @@ model:
             width: 2304
             roi_spatial: 7
             num_classes: 60
-            depth: 2
+            depth: 1
+            mlp_1x1: True
 
 loss:
     type: ava_criterion
@@ -51,11 +49,11 @@ val:
                 resize: 256
           - type: ToTensor
             kwargs:
-                norm_value: 255.
+                norm_value: 1.
           - type: Normalize
             kwargs:
-                mean: [0.450, 0.450, 0.450]
-                std: [0.225, 0.225, 0.225]
+                mean: [110.63666788, 103.16065604, 96.29023126]
+                std: [38.7568578, 37.88248729, 40.02898126]
         temporal:
             type: TemporalCenterCrop
             kwargs:

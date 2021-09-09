@@ -41,7 +41,7 @@ train:
     root_path: data
     annotation_path: annotations/ava_train_v2.2_with_fair_0.9.pkl
     batch_size: 1
-        
+
     augmentation:
         spatial:
           - type: Scale
@@ -71,7 +71,7 @@ train:
             momentum: 0.9
             weight_decay: 0.0000001
             nesterov: True
-        
+
     scheduler:
         type: step
         milestone_epochs: [5.6, 5.8]
@@ -84,7 +84,7 @@ val:
     root_path: data
     annotation_path: annotations/ava_val_v2.2_fair_0.85.pkl
     batch_size: 1
-    
+
     augmentation:
         spatial:
           - type: Scale
