@@ -1,0 +1,67 @@
+evaluate: True
+
+pretrain:
+    path: model_zoo/AVA-Kinetics_SLOWFAST_R101_ACAR_HR2O_DEPTH1.pth.tar
+
+result_path: experiments/AVA-Kinetics/evalAVA_SLOWFAST_R101_ACAR_HR2O_DEPTH1
+manual_seed: 1
+print_freq: 20
+
+model:
+    freeze_bn: True
+    backbone:
+        arch: slowfast101
+        learnable: True
+        kwargs:
+            alpha: 4
+            beta: 0.125
+    neck:
+        type: basic
+        kwargs:
+            bbox_jitter:
+                num: 1
+                scale: 0.075
+            num_classes: 60
+            multi_class: True
+    head:
+        type: acar
+        kwargs:
+            width: 2304
+            roi_spatial: 7
+            num_classes: 60
+            depth: 1
+            mlp_1x1: True
+
+loss:
+    type: ava_criterion
+    kwargs:
+        pose_softmax: True
+
+val:
+    root_path: data
+    annotation_path: annotations/ava_val_v2.2_fair_0.85.pkl
+    batch_size: 1
+
+    augmentation:
+        spatial:
+          - type: Scale
+            kwargs:
+                resize: 256
+          - type: ToTensor
+            kwargs:
+                norm_value: 1.
+          - type: Normalize
+            kwargs:
+                mean: [110.63666788, 103.16065604, 96.29023126]
+                std: [38.7568578, 37.88248729, 40.02898126]
+        temporal:
+            type: TemporalCenterCrop
+            kwargs:
+                size: 64
+                step: 2
+
+    with_label: False
+    eval_mAP:
+        labelmap: annotations/ava_action_list_v2.2_for_activitynet_2019.pbtxt
+        groundtruth: annotations/ava_val_v2.2.csv
+        exclusions: annotations/ava_val_excluded_timestamps_v2.2.csv
