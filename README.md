@@ -40,9 +40,8 @@ In this case, the `master_addr` argument must be provided. Moreover, arguments `
 ## Model Zoo
 Trained models are provided in [`model_zoo/README.md`](https://github.com/Siyu-C/ACAR-Net/blob/master/model_zoo/README.md).
 
-## To-do List
+## To-Do List
 - Our detections for AVA
-- More advanced backbone
 - Data preparation for Kinetics dataset, and training on AVA-Kinetics
 - Implementation for ACFB
 
@@ -52,7 +51,7 @@ ACAR-Net is released under the [Apache 2.0 license](https://github.com/Siyu-C/AC
 ## CVPR 2020 AVA-Kinetics Challenge  
 Find slides and video presentation of our winning solution on [[Google Slides]](https://docs.google.com/presentation/d/1JrZLddujC2LVl3etUKkbj40o486fnQMzlAHHbc8F9q4/edit?usp=sharing) [[Youtube Video]](https://youtu.be/zJPEmG3LCH4?list=PLw6H4u-XW8siSxqdRVcD5aBn3OTuA7M7x&t=1105) [[Bilibili Video]](https://www.bilibili.com/video/BV1nT4y1J716) (Starting from 18:20).
 
-## Preprint
+## About Our Paper
 Find our work on [arXiv](https://arxiv.org/pdf/2006.07976.pdf).
 ![architecture-fig]
 
@@ -61,17 +60,18 @@ Find our work on [arXiv](https://arxiv.org/pdf/2006.07976.pdf).
 Please cite with the following Bibtex code:
 
 ```
-@article{pan2020actorcontextactor,
-  title={Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization},
-  author={Junting Pan and Siyu Chen and Zheng Shou and Jing Shao and Hongsheng Li},
-  journal={arXiv preprint arXiv:2006.07976},
-  year={2020}
+@inproceedings{pan2021actor,
+  title={Actor-context-actor relation network for spatio-temporal action localization},
+  author={Pan, Junting and Chen, Siyu and Shou, Mike Zheng and Liu, Yu and Shao, Jing and Li, Hongsheng},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={464--474},
+  year={2021}
 }
 ```
 
 You may also want to refer to our publication with the more human-friendly Chicago style:
 
-*Junting Pan, Siyu Chen, Zheng Shou, Jing Shao, Hongsheng Li. "Actor-Context-Actor Relation Network for Spatio-Temporal Action Localization." Arxiv 2020.*
+*Pan, Junting, Siyu Chen, Mike Zheng Shou, Yu Liu, Jing Shao, and Hongsheng Li. "Actor-context-actor relation network for spatio-temporal action localization." In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, pp. 464-474. 2021.*
 
 ## Contact
 If you have any general question about our work or code which may be of interest to other researchers, please use the [public issues section](https://github.com/Siyu-C/ACAR-Net/issues) of this repository. Alternatively, drop us an e-mail at siyuchen@pku.edu.cn and junting.pa@gmail.com .
